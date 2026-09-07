@@ -63,7 +63,7 @@ The binary migrates your Zimbra **provisioning and mailbox data**; the IMAPSYNC 
 
 **Infrastructure**
 
-- **Classes of Service (COS)**, with the full inheritance chain preserved. A COS whose name already exists on the destination is restored as `<name>_restored` rather than overwriting it, and the affected domains/accounts are pointed at the correct one.
+- **Classes of Service (COS)**, with the full inheritance chain preserved. A COS whose name already exists on the destination (`default` always does) is restored as `<name>_restored` rather than overwriting it, and every domain and account that used it on the source is bound to that restored copy — so your customizations to `default` (quota, features, password policy) follow your users rather than being silently replaced by the destination's out-of-the-box settings.
 - **Local domains and domain aliases**, and each domain's default COS.
 - **Per-domain DKIM signing keys** for domains configured with DKIM — so signed mail keeps verifying at cutover with no DNS change.
 - **Distribution lists**, their members, and DL aliases.
