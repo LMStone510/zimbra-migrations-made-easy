@@ -110,7 +110,7 @@ The binary migrates your Zimbra **provisioning and mailbox data**; the IMAPSYNC 
 - **External domain authentication** (`zimbraAuthMech` = `ad`/`ldap`/`custom` — domains that authenticate users against Active Directory or another external LDAP directory). The `zimbraAuthLdap*` configuration names *your* directory infrastructure (servers, bind credentials, TLS trust) and must be pointed at deliberately, so it is not carried: every domain is recreated on the destination with internal (`zimbra`) authentication. The backup **warns for each external-auth domain it finds** and records them in `external_auth_domains.txt`; the restore repeats the list. **Reconfigure external authentication on the destination before users log in** — until you do, those users' directory passwords will not work there.
 - Domain-level ACEs (account-level ACEs *do* migrate); and the admin-role flags themselves (`zimbraIsAdminAccount` / `zimbraIsDelegatedAdminAccount`) are intentionally not set on the destination — admins are exported for reference and reconstructed deliberately.
 - Per-domain public-service hostname/port/protocol (you set those on the destination, since they often change as a result of the migration).
-- **Account-level overrides of CoS-managed policy attributes that *loosen* policy, plus override cruft.** Those attributes belong at the Class of Service level, and account-level values are often forgotten one-off workarounds that silently exempt an account from its COS forever. The migration handles the class in tiers: overrides that **tighten security or encode operational policy** (password locks, forwarding-permission policy, per-seat feature grants like EWS and S/MIME, quotas, session lifetimes, 2FA-required/available = TRUE) **do migrate** — dropping those would silently weaken the destination — and every one applied is recorded by the restore in `applied_policy_overrides.txt`, with per-account **quota** overrides called out separately (they interact with COS-keyed billing plans). Overrides that **loosen** policy (e.g. a 2FA exemption on an application account) and provisioning leftovers are deliberately **not** migrated: they surface during your dry-run testing, where they can be fixed properly (that application account belongs on an **app-specific password**, which the migration *does* carry — not on a 2FA exemption). Run [MCE_OP4_cos_override_report.sh](MCE_OP4_cos_override_report.sh) on your source **before** the dry run: it lists exactly what will not migrate and generates an optional reapply batch for anything you conclude is load-bearing. *(User preferences — `zimbraPref*` — are not policy and migrate normally, as do account status and mail forwarding.)*
+- **Account-level overrides of CoS-managed policy attributes that *loosen* policy, plus override cruft.** Those attributes belong at the Class of Service level, and account-level values are often forgotten one-off workarounds that silently exempt an account from its COS forever. The migration handles the class in tiers: overrides that **tighten security or encode operational policy** (password locks, forwarding-permission policy, per-seat feature grants like EWS and S/MIME, quotas, session lifetimes, 2FA-required/available = TRUE) **do migrate** — dropping those would silently weaken the destination — and every one applied is recorded by the restore in `applied_policy_overrides.txt`, with per-account **quota** overrides called out separately (they interact with COS-keyed billing plans). **All mailbox quotas on the destination are suspended (unlimited) from the pre/full restore until you re-arm them after the final IMAPSYNC pass** — the "re-arm enforcement" step in each workflow below — so no mail copy can fail over-quota. Overrides that **loosen** policy (e.g. a 2FA exemption on an application account) and provisioning leftovers are deliberately **not** migrated: they surface during your dry-run testing, where they can be fixed properly (that application account belongs on an **app-specific password**, which the migration *does* carry — not on a 2FA exemption); [OP4](#44-mce_op4_cos_override_reportsh--see-which-accounts-break-cos-inheritance) lists them before you start. *(User preferences — `zimbraPref*` — are not policy and migrate normally, as do account status and mail forwarding.)*
 
 ---
 
@@ -269,7 +269,13 @@ time nice -n 19 ionice -c2 -n7 \
    ```
    All folders exist now (step 4), so every grant succeeds. 5–20 minutes.
 7. **Mail:** `bash launch-all-tmux.sh premigration` — the long blob copy (hours to days). In Workflow A this is the single post-cutover mail run.
-8. **Verify.**
+8. **Re-arm enforcement** (after the mail run has finished and its per-user logs are clean):
+   ```bash
+   zmprov -f /opt/zimbra/import/deferred_quotas.zmp
+   zmprov -f /opt/zimbra/import/deferred_account_statuses.zmp   # only if the restore wrote one
+   ```
+   Every account was migrated with an *unlimited* mailbox quota so nothing could fail over-quota mid-copy; the first batch restores the source quotas (per-account overrides where they existed, COS inheritance everywhere else). The second re-applies locked/closed account statuses, which the restore also never sets live because they block IMAP authentication.
+9. **Verify.**
 
 ---
 
@@ -290,7 +296,13 @@ Complete Sections 3–4 first, and back up with `-mode pre`.
 6. Back up the source with `-mode post`; transfer.
 7. **Restore (post):** `mce-backup-restore -r /opt/zimbra/import -j 6 -mode post` — mailbox data **and** shares in one pass (the folders already exist from Phase 1, so shares restore inline; no separate shares step needed).
 8. **Final delta:** `bash launch-all-tmux.sh postmigration` — picks up the last few days of mail (see Section 8). Move DNS / the Elastic IP.
-9. **Verify.**
+9. **Re-arm enforcement** (after the final delta has finished):
+   ```bash
+   zmprov -f /opt/zimbra/import/deferred_quotas.zmp
+   zmprov -f /opt/zimbra/import/deferred_account_statuses.zmp   # only if the restore wrote one
+   ```
+   Quotas were suspended (unlimited) on every account from the pre restore onward, so neither the bulk passes nor the delta could fail over-quota; this restores the source quotas. Until you run it, the admin console shows every account as unlimited — that is expected, not a missed migration.
+10. **Verify.**
 
 > **Same source/destination FQDN is normal** for an NE→FOSS migration or DR: you build the new server with the old server's identity and move the AWS Elastic IP at cutover, so the hostname never changes. Your licensed binary supports this.
 
