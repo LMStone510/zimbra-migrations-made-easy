@@ -5,15 +5,20 @@ This repository contains content under TWO different licenses.  Read this
 file carefully; the license that applies depends on which file you are using.
 
 
-1. THE OPERATOR SCRIPTS  —  MIT License
----------------------------------------
+1. THE PREPARATION SCRIPTS  —  MIT License
+------------------------------------------
 
 The following shell scripts are licensed under the MIT License (full text
 below).  You may use, copy, modify, and redistribute them under those terms:
 
-    MCE_OP1_imap_preflight.sh
-    MCE_OP2_broken_shares_checker.sh
-    MCE_OP3_mailbox_license_count.sh
+    2-Get-Ready/Pre-Migration-Script-1-Fix-Broken-Shares-On-The-Source-System.sh
+    2-Get-Ready/Pre-Migration-Script-2-Ensure-All-Accounts-Are-IMAP-Capable.sh
+    2-Get-Ready/Pre-Migration-Script-3-Identify-Broken-Inheritance-In-Your-Classes-Of-Service.sh
+    3-Get-Set/Get-Set-Determine-How-Many-Seats-You-Will-Need-To-License.sh
+
+(Until November 2026 these were published as MCE_OP2_broken_shares_checker.sh,
+MCE_OP1_imap_preflight.sh, MCE_OP4_cos_override_report.sh and
+MCE_OP3_mailbox_license_count.sh respectively; the license is unchanged.)
 
 (Each script also carries the MIT License in its own header.)
 
@@ -21,8 +26,10 @@ below).  You may use, copy, modify, and redistribute them under those terms:
 2. EVERYTHING ELSE  —  Copyright, all rights reserved
 -----------------------------------------------------
 
-All other content in this repository — including README.md and any other
-documentation, text, or files — is:
+All other content in this repository — including every README.md, the usage
+guides, the Operator Guide, the code review, the Information Sheet, the
+Contract and Licensing Agreement Request form, and any other documentation,
+text, or files — is:
 
     Copyright (c) 2026 Mission Critical Email LLC.  All rights reserved.
 
@@ -37,7 +44,7 @@ proprietary product and is NOT contained in this repository.
 
 
 --------------------------------------------------------------------------
-MIT License  (applies ONLY to the two operator scripts named in section 1)
+MIT License  (applies ONLY to the four preparation scripts named in section 1)
 
 Copyright (c) 2026 Mission Critical Email LLC
 

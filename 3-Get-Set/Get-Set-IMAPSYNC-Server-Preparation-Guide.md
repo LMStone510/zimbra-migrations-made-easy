@@ -5,7 +5,9 @@
   Mission Critical Email LLC.  See LICENSE.
 -->
 
-# IMAPSYNC Server Preparation — the persistent UID cache
+# Get Set — IMAPSYNC Server Preparation Guide
+
+*Phase Three — Get Set.* How to provision the host that runs the IMAPSYNC bundle, and in particular the **persistent UID cache** it depends on.
 
 Migration binaries from late July 2026 (v15.4.0 and later — the version is
 in the first line of every generated runner script and the bundle's

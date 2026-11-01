@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# MCE_OP4_cos_override_report.sh
+# Pre-Migration-Script-3-Identify-Broken-Inheritance-In-Your-Classes-Of-Service.sh
+# (published as MCE_OP4_cos_override_report.sh until November 2026; no functional change)
 #
 # Copyright (c) 2026 Mission Critical Email LLC.  MIT License (see LICENSE).
 #
@@ -35,7 +36,8 @@
 #   2FA exemption).
 #
 #   (zimbraImapEnabled is excluded entirely: IMAP readiness is
-#   MCE_OP1_imap_preflight.sh's job; this report stays unique.)
+#   Pre-Migration-Script-2-Ensure-All-Accounts-Are-IMAP-Capable.sh's job;
+#   this report stays unique.)
 #
 # This script tells you, BEFORE the migration, exactly which accounts carry
 # such overrides so nothing surfaces as a surprise.  It writes:
@@ -50,7 +52,7 @@
 # the web client by design, and the migration carries them as user data.
 #
 # Usage (as the zimbra user, on the SOURCE):
-#   bash MCE_OP4_cos_override_report.sh [--output-dir /var/tmp]
+#   bash Pre-Migration-Script-3-Identify-Broken-Inheritance-In-Your-Classes-Of-Service.sh [--output-dir /var/tmp]
 #
 # Requires: ldapsearch, zmlocalconfig.
 
@@ -74,8 +76,8 @@ LDAP_PW="$(zmlocalconfig -s -m nokey zimbra_ldap_password)"
 [ -n "$LDAP_URL" ] && [ -n "$LDAP_DN" ] && [ -n "$LDAP_PW" ] || { echo "ERROR: LDAP credentials unavailable" >&2; exit 1; }
 
 TS="$(date +%Y%m%d_%H%M%S)"
-REPORT="$OUTPUT_DIR/MCE_OP4_cos_overrides_${TS}.csv"
-REAPPLY="$OUTPUT_DIR/MCE_OP4_reapply_overrides_${TS}.zmp"
+REPORT="$OUTPUT_DIR/mce-cos-overrides_${TS}.csv"
+REAPPLY="$OUTPUT_DIR/mce-reapply-cos-overrides_${TS}.zmp"
 
 # The policy families reported.  zimbraFeature* is matched as a prefix; the
 # rest are exact attribute names.  Deliberately excluded: zimbraPref* (user
@@ -85,7 +87,7 @@ EXACT_ATTRS="zimbraAttachmentsBlocked zimbraAttachmentsViewInHtmlOnly zimbraMaxM
 # Attributes the migration binary carries automatically (v15.7.0+ Tier 1):
 # excluded so this report lists ONLY what will not migrate.  The tighten-only
 # trio is excluded at its migrated value; the loosening (FALSE) forms ARE
-# reported.  zimbraImapEnabled is OP1's domain (excluded entirely).
+# reported.  zimbraImapEnabled is Pre-Migration Script 2's domain (excluded entirely).
 SKIP_ALWAYS="zimbraImapEnabled zimbraPasswordLocked zimbraFeatureMailForwardingEnabled zimbraFeatureEwsEnabled zimbraFeatureSMIMEEnabled zimbraPop3Enabled zimbraMailQuota zimbraAuthTokenLifetime zimbraAdminAuthTokenLifetime zimbraMailIdleSessionTimeout"
 SKIP_WHEN_TRUE="zimbraFeatureTwoFactorAuthRequired zimbraFeatureTwoFactorAuthAvailable zimbraPasswordMustChange"
 
@@ -120,7 +122,7 @@ BEGIN {
 }' | sort > "$REPORT.tmp"
 
 # Skip Zimbra service accounts by name prefix (same set the migration and
-# OP3 exclude).
+# the seat-count script exclude).
 grep -vE '^(galsync|ham\.|spam\.|virus-quarantine)' "$REPORT.tmp" > "$REPORT.tsv" || true
 rm -f "$REPORT.tmp"
 
@@ -133,7 +135,7 @@ ACCOUNTS=$(cut -f1 "$REPORT.tsv" | sort -u | wc -l)
 } > "$REPORT"
 
 {
-  echo "# MCE_OP4 reapply batch -- generated $TS"
+  echo "# CoS-override reapply batch (Pre-Migration Script 3) -- generated $TS"
   echo "# EVERY line below re-creates an account-level override of a CoS-managed"
   echo "# policy attribute on the destination, DELIBERATELY re-breaking CoS >"
   echo "# Account inheritance.  The MCE migration does not apply these by design."

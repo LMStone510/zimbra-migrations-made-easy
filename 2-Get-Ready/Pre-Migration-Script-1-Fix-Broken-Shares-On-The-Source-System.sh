@@ -6,9 +6,10 @@
 #                   shares.  Produces CSV reports plus reviewable removal scripts.  Read-only by itself;      #
 #                   cleanup only happens when the operator chooses to execute the generated removal scripts.  #
 #                                                                                                             #
-# Usage           : MCE_OP2_broken_shares_checker.sh [--jobs N] [--delay SEC]                                 #
-#                                                   [--timeout SEC] [--output-dir DIR] [-h]                   #
-# Last Updated    : 12 Aug 2026 (v2.3.0 - Part 4: stale ACCEPTANCE records -- live grant, no live mountpoint) #
+# Usage           : Pre-Migration-Script-1-Fix-Broken-Shares-On-The-Source-System.sh                          #
+#                       [--jobs N] [--delay SEC] [--timeout SEC] [--output-dir DIR] [-h]                      #
+# Last Updated    : 01 Nov 2026 (v2.3.1 - published as Pre-Migration Script 1; no functional change)          #
+#                   12 Aug 2026 (v2.3.0 - Part 4: stale ACCEPTANCE records -- live grant, no live mountpoint) #
 #                                                                                                             #
 # Why this exists :                                                                                           #
 #   Broken shares accumulate over time on any long-running Zimbra system as users are added/removed,          #
@@ -54,8 +55,9 @@
 #   - 1 skipped-accounts file (accounts excluded by the reachability probe)                                   #
 #   All output files go to the --output-dir (default /var/tmp/) with a timestamp suffix.                      #
 #                                                                                                             #
-# Version history : See the companion MCE_OP2_broken_shares_checker_CHANGELOG.txt file                        #
-#                   for per-release behavior changes.                                                         #
+# Version history : See the companion CHANGELOG for per-release behavior changes                              #
+#                   (MCE_OP2_broken_shares_checker_CHANGELOG.txt, maintained by Mission Critical Email;       #
+#                   this script was published as MCE_OP2_broken_shares_checker.sh until v2.3.0).              #
 #                                                                                                             #
 ###############################################################################################################
 #                                                                                                             #
@@ -89,7 +91,7 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
 # Script version
-VERSION="2.3.0"
+VERSION="2.3.1"
 
 # ---------------------------------------------------------------------------
 # Defaults (overridable via CLI flags parsed in parse_args)
@@ -525,7 +527,7 @@ get_all_active_users() {
     fi
 
     # Initialize the skipped-accounts audit file
-    echo "# Accounts skipped by MCE_OP2 reachability probe (tab-separated: email <TAB> reason)" > "$SKIPPED_ACCOUNTS_FILE"
+    echo "# Accounts skipped by the Pre-Migration Script 1 reachability probe (tab-separated: email <TAB> reason)" > "$SKIPPED_ACCOUNTS_FILE"
 
     # Choose execution mode: parallel if available + requested, else sequential
     if [[ "$PROBE_JOBS" -gt 1 ]] && command -v parallel >/dev/null 2>&1; then
@@ -1577,7 +1579,7 @@ parse_args "$@"
 cat << EOF
 
 ================================================================================
-  MCE_OP2 Broken Shares Checker
+  Pre-Migration Script 1 - Fix Broken Shares On The Source System
   Version ${VERSION}
 ================================================================================
 
