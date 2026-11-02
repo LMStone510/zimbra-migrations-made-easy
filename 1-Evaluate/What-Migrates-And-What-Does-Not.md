@@ -50,10 +50,10 @@ The migration software migrates your Zimbra **provisioning and mailbox data**; t
 
 **Mail**
 
-- All mail messages, via the auto-generated IMAPSYNC bundle (see the [IMAPSYNC bundle section of the Operator Guide](../4-Go/README.md#7-the-imapsync-bundle--three-phases)).
+- All mail messages, via the auto-generated IMAPSYNC bundle (see the [IMAPSYNC bundle section of the Operator Guide](../4-Go---The-Operator-Guide/README.md#7-the-imapsync-bundle--three-phases)).
 
 **What does not migrate** (by design):
-- **Mail blobs travel via IMAPSYNC, not the provisioning path** — that is the architecture, not a gap (the [Operator Guide](../4-Go/README.md#7-the-imapsync-bundle--three-phases) explains why this is an advantage).
+- **Mail blobs travel via IMAPSYNC, not the provisioning path** — that is the architecture, not a gap (the [Operator Guide](../4-Go---The-Operator-Guide/README.md#7-the-imapsync-bundle--three-phases) explains why this is an advantage).
 - GALsync accounts.
 - ActiveSync/mobile, S/MIME, ZCO/EWS, and NE Backup settings are skipped automatically on a Network Edition → FOSS migration (they have no native FOSS equivalent and would otherwise fail account creation). *(Two-factor authentication is the exception — it **is** migrated; see "What migrates" above.)*
 - Custom `localconfig` values, MTA settings, SSL certificates, branding/theming, and external auth integrations (Okta/JumpCloud/AD) — these belong to the destination's own build.

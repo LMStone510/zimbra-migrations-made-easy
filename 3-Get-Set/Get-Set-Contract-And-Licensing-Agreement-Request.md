@@ -82,7 +82,7 @@ Phone:   ______________________________________
 
 ```
 Earliest date the first dry run could start:  ____________
-Target cutover date:                          ____________
+(The migration binary expires 60 days after this date.)
 ```
 
 ---

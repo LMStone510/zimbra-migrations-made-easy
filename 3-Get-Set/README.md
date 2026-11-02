@@ -20,6 +20,6 @@ The build you receive is bound to the source and destination systems and the sco
 
 ---
 
-When your build arrives, continue to [Phase Four — Go](../4-Go/README.md).
+When your build arrives, continue to [Phase Four — Go](../4-Go---The-Operator-Guide/README.md).
 
 **Mission Critical Email LLC** — <sales@missioncriticalemail.com>

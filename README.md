@@ -19,7 +19,7 @@ This repository is the companion to <https://www.missioncriticalemail.com/zimbra
 | **1. Evaluate** | [`1-Evaluate/`](1-Evaluate/) | Decide whether the software fits your migration, and satisfy your security and audit teams that it is well-tested and data-safe. |
 | **2. Get Ready** | [`2-Get-Ready/`](2-Get-Ready/) | Run the three free, open-source pre-migration scripts on your source system to find and fix the things that break migrations. |
 | **3. Get Set** | [`3-Get-Set/`](3-Get-Set/) | Prepare the IMAPSYNC server, determine how many seats to license, and request your contract and licensing agreement. |
-| **4. Go** | [`4-Go/`](4-Go/) | The Operator Guide: the step-by-step procedure for performing the migration with your licensed build. |
+| **4. Go** | [`4-Go---The-Operator-Guide/`](4-Go---The-Operator-Guide/) | The Operator Guide: the step-by-step procedure for performing the migration with your licensed build. |
 
 ---
 
@@ -52,7 +52,7 @@ Everything that has to be in place before your licensed build is delivered.
 
 ## Phase Four — Go
 
-- [**The Operator Guide**](4-Go/README.md) — prerequisites, the complete command reference, the two cutover workflows, and the IMAPSYNC bundle. This is the document you have open during the migration.
+- [**The Operator Guide**](4-Go---The-Operator-Guide/README.md) — prerequisites, the complete command reference, the two cutover workflows, and the IMAPSYNC bundle. This is the document you have open during the migration.
 
 ---
 

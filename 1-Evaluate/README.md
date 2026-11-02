@@ -24,7 +24,7 @@ If the answer to both is yes, move on to [Phase Two — Get Ready](../2-Get-Read
 2. You bought a Network Edition license and need to migrate off an existing Open Source system.
 3. You're a Zimbra BSP partner onboarding a new customer's to-be-retired self-hosted Zimbra system.
 4. You need as short a cutover window as possible — staged premigration passes move the mail while users stay on the source, so the cutover itself is minutes, not days.
-5. You're a hosting provider absorbing customers in waves — domain-scoped licensing migrates one wave of domains at a time onto the same destination farm.
+5. You're combining multiple disparate Zimbra systems into one Zimbra system — domain-scoped licensing migrates one wave of domains at a time onto the same destination farm.
 
 **Any version 8.8.15 or higher. Any OS. Any Zimbra edition.** FOSS ↔ Network Edition in either direction, a different operating system, and a different number of servers — all in the same move. A typical example: Zimbra 9.0.0 FOSS on Ubuntu 18 → Zimbra 10.1 Network Edition on Rocky Linux 9.
 
