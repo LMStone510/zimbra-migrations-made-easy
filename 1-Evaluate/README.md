@@ -21,10 +21,9 @@ If the answer to both is yes, move on to [Phase Two — Get Ready](../2-Get-Read
 ## 1. Is it the right tool? — reach for our migration software when:
 
 1. A Rolling Upgrade or an rsync migration isn't appropriate — for example when S3 is present on the source system.
-2. You bought a Network Edition license and need to migrate off an existing Open Source system.
-3. You're a Zimbra BSP partner onboarding a new customer's to-be-retired self-hosted Zimbra system.
-4. You need as short a cutover window as possible — staged premigration passes move the mail while users stay on the source, so the cutover itself is minutes, not days.
-5. You're combining multiple disparate Zimbra systems into one Zimbra system — domain-scoped licensing migrates one wave of domains at a time onto the same destination farm.
+2. You bought an NE license and need to migrate from a FOSS system.
+3. You're a Zimbra BSP partner onboarding a new customer's to-be-retired self-hosted Zimbra system — domain-scoped licensing migrates one wave of domains at a time onto the same destination farm.
+4. You need users' email data in place before the actual cutover.
 
 **Any version 8.8.15 or higher. Any OS. Any Zimbra edition.** FOSS ↔ Network Edition in either direction, a different operating system, and a different number of servers — all in the same move. A typical example: Zimbra 9.0.0 FOSS on Ubuntu 18 → Zimbra 10.1 Network Edition on Rocky Linux 9.
 
